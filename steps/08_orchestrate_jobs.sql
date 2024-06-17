@@ -49,7 +49,13 @@ EXECUTE TASK ORDERS_UPDATE_TASK;
 -- TODO: Add Snowsight details here
 -- https://docs.snowflake.com/en/user-guide/ui-snowsight-tasks.html
 
-
+CREATE OR REPLACE TASK DAILY_CITY_METRICS_UPDATE_TASK
+WAREHOUSE = HOL_WH
+AFTER ORDERS_UPDATE_TASK
+WHEN
+  SYSTEM$STREAM_HAS_DATA('ORDERS_STREAM')
+AS
+CALL ANALYTICS.DAILY_CITY_METRICS_UPDATE_SP();
 
 -- Alternatively, here are some manual queries to get at the same details
 SHOW TASKS;
